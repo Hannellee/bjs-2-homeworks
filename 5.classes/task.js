@@ -1,177 +1,60 @@
 // Задача 1
 
-class PrintEditionItem {
 
-    constructor(name, releaseDate, pagesCount) {
-        this.state = 100;
-        this.type = null;
-
-        this.name = name;
-        this.releaseDate = releaseDate;
-        this.pagesCount = pagesCount;
+function parseCount(value) {
+    let number = Number.parseInt(value, 10);
+    if(isNaN(number)) {
+        throw new Error('Невалидное значение');
     }
 
-    fix() {
-        return this.state = 1.5 * this.state;
-    }
-
-    set state(stateFixed) {
-        if(stateFixed < 0) {
-            this._state = 0;
-        } else if(stateFixed > 100) {
-            this._state = 100;
-        } else {
-            this._state = stateFixed;
-        }
-    }
-
-    get state() {
-        return this._state;
-    }
+    return number;
 }
 
-class Magazine extends PrintEditionItem {
-    constructor(name, releaseDate, pagesCount) {
-        super(name, releaseDate, pagesCount);
-        this.type = "magazine";
+function validateCount(value) {
+    try {
+        return parseCount(value);
     }
-}
-
-class Book extends PrintEditionItem {
-    constructor(author, name, releaseDate, pagesCount) {
-        super(name, releaseDate, pagesCount);
-        this.type = "book";
-        this.author = author;
-    }
-}
-
-class NovelBook extends Book {
-    constructor(author, name, releaseDate, pagesCount) {
-        super(author, name, releaseDate, pagesCount);
-        this.type = "novel";
-    }
-}
-
-class FantasticBook extends Book {
-    constructor(author, name, releaseDate, pagesCount) {
-        super(author, name, releaseDate, pagesCount);
-        this.type = "fantastic";
-    }
-}
-
-class DetectiveBook extends Book {
-    constructor(author, name, releaseDate, pagesCount) {
-        super(author, name, releaseDate, pagesCount);
-        this.type = "detective";
+    catch(err) {
+        return err;
     }
 }
 
 
 // Задача 2
 
-class Library {
-    constructor(name) {
-        this.name = name;
-        this.books = [];
-    }
 
-    addBook(book) {
-        if(book.state > 30) {
-            this.books.push(book);
+class Triangle {
+    constructor(a, b, c) {
+        if(((a + b) < c) || ((b + c) < a) || ((a + c) < b)) {
+            throw new Error('Треугольник с такими сторонами не существует');          
         }
+
+        this.a = a;
+        this.b = b;
+        this.c = c;  
     }
 
-    findBookBy(type, value) {
-        let bookFinded = this.books.find(book => book[type] === value);
-        if(bookFinded) {
-            return bookFinded;
-        } else {
-            return null;
-        }
-    }
-
-    giveBookByName(bookName) {
-        let bookGiven = this.books.find(book => book.name === bookName);
-        if(bookGiven) {
-            let bookIndex = this.books.indexOf(bookGiven);
-            this.books.splice(bookIndex, 1);
-            return bookGiven;
-        } else {
-            return null;
-        }
-       
-    }
-}
-
-
-// Задача 3
-
-
-class Student {
-
-    constructor(name) {
-        this.name = name;
-        this.journal = {};
-    }
-
-    // setSubject(subjectName) {
-    // }
-
-    addMark(mark, subjectName) {
-
-        if(this.journal.hasOwnProperty(subjectName)) {
-            console.log('Предмет уже существует')
-        } else {
-            this.journal[subjectName] = [];
-            console.log('Создан новый предмет')
-        }
+    getPerimeter() {
+        return Number(this.a + this.b + this.c);
         
-        if((typeof mark === 'number') && (mark >= 1) && (mark <= 5)) {
-            this.journal[subjectName].push(mark);
-        } else {
-            console.log('Ошибка!')
-        }
     }
 
-    getAverageBySubject(subjectName) {
+    getArea() {
+        let p = (this.getPerimeter()) / 2;
+        // p = p / 2;
 
-        if (this.journal.hasOwnProperty(subjectName)) {
-
-            let sum = 0;
-            let marks = this.journal[subjectName];
-
-            marks.forEach((item, idx, marks) => sum += item);
-            let averageBySubject = sum / marks.length;
-            return averageBySubject;
-        } else {
-            console.log("Несуществующий предмет");
-        }
+        let s = Math.sqrt(p * (p - this.a) * (p - this.b) * (p - this.c));
+        return Number(s.toFixed(3));
     }
-
-    getAverage() {
-        // Здесь не понимаю, как обратиться ко всем оценкам...
-
-        let sum = 0;
-        let marks;
-        // Вот здесь, чему будет равен изначально marks? 
-        // Понимаю, что наверное нужно как-то объединить все массвы с оценками, но не понимаю, как..
-
-        marks.forEach((item, idx, marks) => sum += item);
-        let averageAll = sum / marks.length;
-        return averageAll;
-    }
-
-    exclude(reason) {
-        delete this.journal;
-        this.excluded = reason;
-      }
 }
 
-
-// Student.prototype.addMarks = function (...mark) {
-
-//   if(this.marks === undefined){ 
-//     this.marks = [];
-//     }
-//     mark.forEach((item, idx, marks) => this.marks.push(mark[idx]));
-// }
+function getTriangle(a, b, c) {
+    try {
+        return new Triangle(a, b, c);
+    } 
+    catch(err) {        
+        
+        return {getArea: function() {return ('Ошибка! Треугольник не существует')}, 
+        getPerimeter: function() {return ('Ошибка! Треугольник не существует')}};    
+    }
+}
