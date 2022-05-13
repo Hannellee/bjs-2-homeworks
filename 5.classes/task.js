@@ -114,9 +114,6 @@ class Student {
         this.journal = {};
     }
 
-    // setSubject(subjectName) {
-    // }
-
     addMark(mark, subjectName) {
 
         if(this.journal.hasOwnProperty(subjectName)) {
@@ -157,13 +154,10 @@ class Student {
             let result = this.getAverageBySubject(subjectName);
 
             sum = sum + result;
-
-            return sum;
         }
         let marks = this.journal;
         
-        let averageAll = sum / marks.length;
-        return averageAll;
+        return sum / (Object.keys(marks)).length;
     }
 
     exclude(reason) {
@@ -171,12 +165,3 @@ class Student {
         this.excluded = reason;
       }
 }
-
-
-// Student.prototype.addMarks = function (...mark) {
-
-//   if(this.marks === undefined){ 
-//     this.marks = [];
-//     }
-//     mark.forEach((item, idx, marks) => this.marks.push(mark[idx]));
-// }
